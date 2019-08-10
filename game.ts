@@ -2,10 +2,33 @@ import { BlackJack } from "./blackjack";
 import { Player } from "./player";
 import { Strategy } from "./strategy";
 
-let player: Player = new Player(new Strategy(), 1000, 10);
-let blackJack: BlackJack = new BlackJack(6, player);
 
-for (let i = 0; i < 100; i++) {
-    blackJack.playShoe();
-    console.log(`${i + 1} ${player.bank}`)
+
+for (let j = 0; j < 10; j++) {
+    let player: Player = new Player(new Strategy(), 1000, 10);
+    let blackJack: BlackJack = new BlackJack(6, player);
+
+    //let min = 1000;
+    //let max = 1000;
+
+    for (let i = 0; i < 100000; i++) {
+        blackJack.playShoe();
+        // if (player.bank > max) {
+        //     max = player.bank;
+        // }
+
+        // if (player.bank < min) {
+        //     min = player.bank;
+        // }
+
+        //console.log(`${i + 1} ${player.bank}`);
+    }
+    console.log(`${blackJack.totalBetAmount},${player.bank},${player.bank / blackJack.totalBetAmount}`);
+    //console.log(`MAX: ${max}`);
+    //console.log(`MIN: ${min}`);
 }
+
+
+
+
+

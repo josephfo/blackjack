@@ -3,9 +3,6 @@ import { Card } from "./card";
 export class Hand {
     public cards: Card[];
     public hasAce: boolean = false;
-    // count is the sum of all card values and Ace is always 1.
-    // This is used to lookup actions in the strategy table.
-    public count: number;
     public splitAllowed: boolean = false;
     public doubleAllowed: boolean = false;
     public busted: boolean = false;
@@ -15,7 +12,6 @@ export class Hand {
     constructor(bet: number = 0) {
         // default to zero because dealer will not have a bet.
         this.cards = [];
-        this.count = 0;
         this.betSize = bet;
     }
 
@@ -24,10 +20,7 @@ export class Hand {
     }
 
     removeCard(): Card {
-        // Only called during split.
-        let card = this.cards.pop();
-        this.count -= card.value;
-        return card;
+        return this.cards.pop();
     }
 
     toString(): string {
@@ -35,24 +28,38 @@ export class Hand {
         this.cards.forEach(card => {
             handString += `${card.rankString} `
         });
-        handString += `(${this.trueCount()})`;
         return handString;
     }
 
-    // trueCount is the count adjusted for aces.
-    // used when determining winner.
-    trueCount(): number {
-        if (this.hasAce && this.count < 12) {
-            return this.count + 10;
-        } else {
-            return this.count;
-        }
+    // This returns the count of the hand with all A's count as 1.
+    // This is used to determine strategy.
+    get count(): number {
+        let count = 0;
+        this.cards.forEach(card => {
+            count += card.value;
+        });
+
+        return count;
     }
+
+    // Final score - used to determine who won hand.
+    // A's may be 1 or 11.
+    get finalCount(): number {
+        let final = this.count;
+        if (this.hasAce) {
+            if (final < 12) {
+                // Only one A can be an 11.
+                final += 10;
+            }
+        }
+        return final;
+    }
+
 
     addCard(card: Card) {
         this.cards.push(card);
 
-        if (card.value === 1) {
+        if (card.value === 1) {  // Bug here.  card was undefined.
             this.hasAce = true;
         }
 
@@ -68,8 +75,6 @@ export class Hand {
         } else {
             this.splitAllowed = false;
         }
-
-        this.count += card.value;
 
         // If hand count is greater than 21, hand is busted.
         if (this.count > 21) {
