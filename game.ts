@@ -5,14 +5,14 @@ import { Strategy } from "./strategy";
 
 
 
-for (let j = 0; j < 50; j++) {
-    let player: Player = new Player(new Strategy(), 0, 10);
+for (let j = 0; j < 2; j++) {
+    let player: Player = new Player(new Strategy(), 0, 10, 1);
     let blackJack: BlackJack = new BlackJack(6, player);
 
     //let min = 1000;
     //let max = 1000;
 
-    for (let i = 0; i < 100000; i++) {
+    for (let i = 0; i < 10; i++) {
         blackJack.playShoe();
         // if (player.bank > max) {
         //     max = player.bank;
