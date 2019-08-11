@@ -31,8 +31,9 @@ export class BlackJack {
                     let newHand = new Hand(this.player.betSize);
                     this.totalBetAmount += this.player.betSize;
 
-                    newHand.addCard(this.shoe.cards.pop());
                     newHand.addCard(hand.removeCard());
+                    newHand.addCard(this.shoe.cards.pop());
+
                     hand.addCard(this.shoe.cards.pop());
                     this.player.hands.push(newHand);
 
@@ -52,7 +53,7 @@ export class BlackJack {
         this.shoe = new Shoe(this.decksPerShoe);
         this.shoe.shuffle();
 
-        while (this.shoe.cards.length > 25) {
+        while (this.shoe.cards.length > 40) {
             //console.log('-----------------');
             this.dealerHand = new Hand();
             this.player.hands = []; // clear out existing hands if any;
@@ -118,11 +119,8 @@ export class BlackJack {
                 }
             }
 
-            // TODO: Optimization - don't hit dealer if all player hands bust.
-            // TODO: Add logic for dealer to hit on soft 17.
-            // TODO: Handle ACE.
             //console.log(`Dealers Hand: ${this.dealerHand.toString()}`);
-            while (this.dealerHand.finalCount < 17) {
+            while (this.dealerHand.finalCount < 17 || (this.dealerHand.count === 7 && this.dealerHand.finalCount === 17)) {
                 let newDealerCard = this.shoe.cards.pop();
                 this.dealerHand.addCard(newDealerCard);
                 //console.log(`Dealer hits: ${this.dealerHand.toString()}`);

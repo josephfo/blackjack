@@ -4,8 +4,9 @@ import { Strategy } from "./strategy";
 
 
 
-for (let j = 0; j < 10; j++) {
-    let player: Player = new Player(new Strategy(), 1000, 10);
+
+for (let j = 0; j < 50; j++) {
+    let player: Player = new Player(new Strategy(), 0, 10);
     let blackJack: BlackJack = new BlackJack(6, player);
 
     //let min = 1000;
